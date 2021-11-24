@@ -6,7 +6,8 @@ module.exports = {
       lat: 12.970118174497001,
       lon: 77.63940372979536,
       isBooked: false,
-      isPink: true
+      isPink: true,
+      currentRideId: undefined
     },
     {
       id: 1,
@@ -14,7 +15,8 @@ module.exports = {
       lat: 12.961482100489755,
       lon: 77.64549770865008,
       isBooked: false,
-      isPink: false
+      isPink: false,
+      currentRideId: undefined
     },
     {
       id: 2,
@@ -22,7 +24,8 @@ module.exports = {
       lat: 12.96080249358276,
       lon: 77.64829793483432,
       isBooked: false,
-      isPink: false
+      isPink: false,
+      currentRideId: undefined
     }
   ],
   users: [
@@ -31,21 +34,21 @@ module.exports = {
       name: 'Geekskool',
       lat: 12.961529724459048,
       lon: 77.64430036382869,
-      isRiding: false
+      status: 'idle' // enum ['idle', 'booked', 'riding']
     },
     {
       id: 2,
       username: 'Ramada',
       lat: 12.9555539710741,
       lon: 77.64109328351748,
-      isRiding: false
+      status: 'idle'
     },
     {
       id: 3,
       username: 'Adobe',
       lat: 12.925870035636654,
       lon: 77.69337356700868,
-      isRiding: false
+      status: 'idle'
     }
   ],
   rides: []

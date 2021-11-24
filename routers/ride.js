@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const controller = require('../controllers/ride')
 
-router.get('/find', controller.findRide)
-router.post('/book', controller.bookRide)
+router.get('/find', controller.find)
+router.post('/book', controller.book)
 
 module.exports = router

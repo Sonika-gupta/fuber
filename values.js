@@ -3,10 +3,10 @@ const globals = require('./globals')
 
 class Ride {
   constructor ({ userId, cabId, source, destination }) {
-    this.id = globals.rideSerialNumber++
+    this.id = ++globals.rideSerialNumber
     this.userId = userId
     this.cabId = cabId
-    this.status = 'active' // ['active', 'cancelled', 'completed']
+    this.status = 'active' // enum ['active', 'cancelled', 'completed']
     this.source = source
     this.destination = destination
   }

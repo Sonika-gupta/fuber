@@ -1,15 +1,19 @@
-const data = require('../data')
+const { cabs } = require('../data')
 const { findDistance, findClosest } = require('../utils')
-const { Ride } = require('../values')
+const { createRide } = require('./rides')
+const { updateUser } = require('./users')
 
-function updateData (table, item) {
-  data[table] = data[table].map(entry => (entry.id === item.id ? item : entry))
+function updateCab (cab) {
+  console.log('updating', cab)
+  const i = cabs.findIndex(entry => entry.id === cab.id)
+  cabs[i] = cab
+  return cab
 }
 
 function getCabsInRadius ({ lat, lon }, radius) {
-  return data.cabs.filter(
+  return cabs.filter(
     cab =>
-      cab.isBooked &&
+      !cab.isBooked &&
       Math.abs(cab.lat - lat) < 0.01 &&
       Math.abs(cab.lon - lon) < 0.01
   )
@@ -33,20 +37,12 @@ function book ({ source, destination, user, cab }) {
     const [error, newCab] = this.find(source)
     if (error) return [error, null]
     cab = newCab
-  } else cab = data.cabs.find(cabie => cabie.id === cab.id)
-  const ride = new Ride({
-    userId: user.id,
-    cabId: cab.id,
-    source,
-    destination
-  })
-  console.log(ride)
+  } else cab = cabs.find(cabie => cabie.id === cab.id)
 
   try {
-    data.rides.push(ride)
-    cab.isBooked = user.isRiding = true
-    updateData('cabs', cab)
-    updateData('users', user)
+    const ride = createRide({ source, destination, user, cab })
+    cab = updateCab({ ...cab, isBooked: true, currentRideId: ride.id })
+    user = updateUser({ ...user, status: 'booked' })
     return [null, cab]
   } catch (err) {
     return [err, null]
