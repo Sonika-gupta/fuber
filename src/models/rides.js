@@ -1,5 +1,5 @@
 const { rides } = require('../../data')
-const { Ride } = require('../Ride')
+const { Ride } = require('../classes/Ride')
 const { updateUser } = require('./users')
 
 function createRide ({ source, destination, user, cab }) {

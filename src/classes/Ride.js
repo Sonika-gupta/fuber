@@ -1,16 +1,16 @@
-const { findDistance } = require('./utils')
-const globals = require('./globals')
+const { findDistance } = require('../utils')
+const globals = require('../globals')
 
 class Ride {
   constructor ({ userId, cabId, source, destination }) {
     this.id = ++globals.rideSerialNumber
     this.userId = userId
     this.cabId = cabId
-    this.status = undefined // enum ['active', 'cancelled', 'completed']
+    this.status = 'accepted' // enum ['started', 'cancelled', 'completed']
     this.source = source
     this.destination = destination
-    this.startTime = undefined
-    this.endTime = undefined
+    this.startTime = null
+    this.endTime = null
   }
 
   get amount () {

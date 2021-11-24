@@ -2,30 +2,30 @@ module.exports = {
   cabs: [
     {
       id: 3,
-      drivername: 'Bohemian',
+      driver: 'Bohemian',
       lat: 12.970118174497001,
       lon: 77.63940372979536,
       isBooked: false,
       isPink: true,
-      currentRideId: undefined
+      currentRideId: null
     },
     {
       id: 1,
-      drivername: 'Resida',
+      driver: 'Resida',
       lat: 12.961482100489755,
       lon: 77.64549770865008,
       isBooked: false,
       isPink: false,
-      currentRideId: undefined
+      currentRideId: null
     },
     {
       id: 2,
-      drivername: 'Leela',
+      driver: 'Leela',
       lat: 12.96080249358276,
       lon: 77.64829793483432,
       isBooked: false,
       isPink: false,
-      currentRideId: undefined
+      currentRideId: null
     }
   ],
   users: [
