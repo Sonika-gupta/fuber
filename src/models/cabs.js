@@ -1,4 +1,4 @@
-const { cabs } = require('../data')
+const { cabs } = require('../../data')
 const { errors } = require('../globals')
 const { findDistance, findClosest } = require('../utils')
 const { createRide } = require('./rides')
@@ -19,6 +19,7 @@ function getCabsInRadius ({ lat, lon }, radius) {
       Math.abs(cab.lon - lon) < 0.01
   )
 }
+
 function find (location) {
   // 0.01 degrees = 1.11 km
   let radius = 0.01

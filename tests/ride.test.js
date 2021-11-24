@@ -1,6 +1,6 @@
-const { find, book } = require('./models/cabs')
-const { users, cabs } = require('./data')
-const { errors } = require('./globals')
+const { find, book } = require('../src/models/cabs')
+const { users, cabs } = require('../data')
+const { errors } = require('../src/globals')
 
 test('find: closest cab to user with id 1 should be cab with id 1', () => {
   const user = users.find(user => user.id === 1)

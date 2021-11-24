@@ -1,4 +1,4 @@
-const { users } = require('../data')
+const { users } = require('../../data')
 
 function updateUser (user) {
   if (!user.id) throw Error('Need User ID')

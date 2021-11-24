@@ -6,9 +6,11 @@ class Ride {
     this.id = ++globals.rideSerialNumber
     this.userId = userId
     this.cabId = cabId
-    this.status = 'active' // enum ['active', 'cancelled', 'completed']
+    this.status = undefined // enum ['active', 'cancelled', 'completed']
     this.source = source
     this.destination = destination
+    this.startTime = undefined
+    this.endTime = undefined
   }
 
   get amount () {
