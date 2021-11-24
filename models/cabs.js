@@ -31,7 +31,8 @@ function find (location) {
 }
 
 function book ({ source, destination, user, cab }) {
-  if (user.isRiding) return ['Finish the current ride to book another', null]
+  if (user.status != 'idle')
+    return ['Finish the current ride to book another', null]
 
   if (!cab || cab.isBooked) {
     const [error, newCab] = this.find(source)
