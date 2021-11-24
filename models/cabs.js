@@ -1,4 +1,5 @@
 const { cabs } = require('../data')
+const { errors } = require('../globals')
 const { findDistance, findClosest } = require('../utils')
 const { createRide } = require('./rides')
 const { updateUser } = require('./users')
@@ -6,7 +7,7 @@ const { updateUser } = require('./users')
 function updateCab (cab) {
   console.log('updating', cab)
   const i = cabs.findIndex(entry => entry.id === cab.id)
-  cabs[i] = cab
+  Object.assign(cabs[i], cab)
   return cab
 }
 
@@ -27,12 +28,11 @@ function find (location) {
     cab = findClosest(location, closeCabs)
     radius += 0.01
   }
-  return cab ? [null, cab] : ['No Cabs Available', null]
+  return cab ? [null, cab] : [errors.cabNotFound, null]
 }
 
 function book ({ source, destination, user, cab }) {
-  if (user.status != 'idle')
-    return ['Finish the current ride to book another', null]
+  if (user.status != 'idle') return [errors.userNotIdle, null]
 
   if (!cab || cab.isBooked) {
     const [error, newCab] = this.find(source)
