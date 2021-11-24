@@ -35,7 +35,7 @@ function book ({ source, destination, user, cab }) {
   if (user.status != 'idle') return [errors.userNotIdle, null]
 
   if (!cab || cab.isBooked) {
-    const [error, newCab] = this.find(source)
+    const [error, newCab] = find(source)
     if (error) return [error, null]
     cab = newCab
   } else cab = cabs.find(cabie => cabie.id === cab.id)

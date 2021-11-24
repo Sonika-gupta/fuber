@@ -1,8 +1,9 @@
 const { users } = require('../data')
 
 function updateUser (user) {
+  if (!user.id) throw Error('Need User ID')
   const i = users.findIndex(entry => entry.id === user.id)
-  users[i] = user
+  Object.assign(users[i], user)
   return user
 }
 
