@@ -15,8 +15,6 @@ function getResult (res, method, params) {
 function newRide (req, res) {
   const { source, destination, user } = req.body
 
-  if (user.status != userStatus.idle) res.send(500).send(errors.userNotIdle)
-
   const cab = getResult(res, cabModel.readClosestCab, source)
   Object.assign(
     user,
