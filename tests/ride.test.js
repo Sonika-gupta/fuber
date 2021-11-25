@@ -1,39 +1,173 @@
-const { find, book } = require('../src/models/cabs')
-const { users, cabs } = require('../data')
-const { errors } = require('../src/globals')
+const { createRide, updateRide } = require('../src/models/rides')
+const { errors, rideStatus } = require('../src/globals')
+const { users, cabs, rides } = require('../data')
 
-test('find: closest cab to user with id 1 should be cab with id 1', () => {
-  const user = users.find(user => user.id === 1)
-  const cab = cabs.find(cab => cab.id === 1)
-  expect(find(user)).toEqual([null, cab])
-})
-
-test('find: no cab in range for user with id 3', () => {
-  const user = users.find(user => user.id === 3)
-  expect(find(user)).toEqual([errors.cabNotFound, null])
-})
-
-test('book: book the closest cab', () => {
-  const user = users.find(user => user.id === 1)
-  const cab = cabs.find(cab => cab.id === 1)
+test('Create new ride without user should fail', () => {
+  const cab = cabs.find(cab => cab.id == 1)
   expect(
-    book({ source: { lat: user.lat, lon: user.lon }, destination: {}, user })
-  ).toEqual([null, { ...cab, isBooked: true }])
+    createRide({
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      cab
+    })
+  ).toEqual([errors.undefinedUserId, null])
 })
 
-test('book: cannot book if user not idle', () => {
-  const user = users.find(user => user.id === 1)
+test('Create new ride without cab should fail', () => {
+  const user = users.find(user => user.id == 2)
   expect(
-    book({ source: { lat: user.lat, lon: user.lon }, destination: {}, user })
-  ).toEqual([errors.userNotIdle, null])
+    createRide({
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      user
+    })
+  ).toEqual([errors.undefinedCabId, null])
 })
 
-test('book: book the next closest cab when closest one is not available', () => {
-  const user = users.find(user => user.id === 2)
-  const i = cabs.findIndex(cab => cab.id === 1)
-  Object.assign(cabs[i], { isBooked: true })
-  const cab = cabs.find(cab => cab.id === 2)
+test('Create new ride without source should ask for pickup location', () => {
+  const user = users.find(user => user.id == 2)
+  const cab = cabs.find(cab => cab.id == 1)
   expect(
-    book({ source: { lat: user.lat, lon: user.lon }, destination: {}, user })
-  ).toEqual([null, { ...cab, isBooked: true }])
+    createRide({
+      user,
+      cab
+    })
+  ).toEqual([errors.sourceRequired, null])
+})
+
+test('Create new ride', () => {
+  const user = users.find(user => user.id == 2)
+  const cab = cabs.find(cab => cab.id == 1)
+  console.log(user)
+  expect(
+    createRide({
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      user,
+      cab
+    })
+  ).toEqual([
+    null,
+    {
+      id: 1,
+      userId: 2,
+      cab: {
+        id: 1,
+        driver: 'Resida',
+        isPink: false
+      },
+      status: 'accepted',
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      startTime: null,
+      endTime: null
+    }
+  ])
+})
+
+test('Updating ride without id not possible', () => {
+  expect(updateRide({ startTime: Date.now() })).toEqual([
+    errors.undefinedRideId,
+    null
+  ])
+})
+
+test('Start a ride', () => {
+  console.log(rides)
+  expect(
+    updateRide({ id: 1, startTime: 1637835011712, status: rideStatus.started })
+  ).toEqual([
+    null,
+    {
+      id: 1,
+      userId: 2,
+      cab: {
+        id: 1,
+        driver: 'Resida',
+        isPink: false
+      },
+      status: 'started',
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      startTime: 1637835011712,
+      endTime: null
+    }
+  ])
+})
+
+test('Starting an ongoing ride should fail', () => {
+  expect(
+    updateRide({ id: 1, startTime: 1637835013242, status: rideStatus.started })
+  ).toEqual([errors.rideOngoing, null])
+})
+
+test('End a ride', () => {
+  expect(
+    updateRide({ id: 1, endTime: 1637835013242, status: rideStatus.completed })
+  ).toEqual([
+    null,
+    {
+      id: 1,
+      userId: 2,
+      cab: {
+        id: 1,
+        driver: 'Resida',
+        isPink: false
+      },
+      status: 'completed',
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      },
+      destination: {
+        lat: 13.198666126985055,
+        lon: 77.70648550896739
+      },
+      startTime: 1637835011712,
+      endTime: 1637835013242
+    }
+  ])
+})
+
+test('Ending a completed ride should fail', () => {
+  expect(
+    updateRide({ id: 1, endTime: 1637835013242, status: rideStatus.completed })
+  ).toEqual([errors.rideCompleted, null])
+})
+
+test('Cancelling a started or completed ride should fail', () => {
+  expect(updateRide({ id: 1, status: rideStatus.cancelled })).toEqual([
+    errors.cannotCancelRide,
+    null
+  ])
 })
