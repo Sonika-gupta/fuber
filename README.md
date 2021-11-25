@@ -2,7 +2,7 @@
 
 Basic implementation of API for a cab hiring service.
 
-### Requirements:
+## Requirements
 
 - There is a fleet of cabs available, each cab has a location, determined by it’s latitude and longitude.
 - A customer can call one of the taxis by providing their location, and the nearest taxi must be assigned to the customer.
@@ -52,13 +52,16 @@ cab: {
     lon: 77.64549770865008,
     isBooked: false,
     isPink: false,
-    currentRideId: null
 }
 
 ride: {
   id: 1,
   userId: 2,
-  cabId: 1,
+  cab: {
+    id: 1,
+    driver: 'Resida',
+    isPink: false,
+  },
   status: 'accepted' // enum ['accepted', 'started', 'cancelled', 'completed'],
   source: {
       lat: 12.961756055726415,
@@ -75,36 +78,48 @@ ride: {
 
 ## API Endpoints
 
-GET `/ride/find`
+GET `/rides`
 
 > _query_: lat, lon
 > _response_: error or `cab` object
 
-Findes the closest cab within approximately 5 km radius of user's location
+Returns the array of available cabs within approximately 1 km radius of user's location
 
-POST `/ride/book`
+GET `/rides/pink`
 
-> _body_: `{source, destination, cab, user}` > _response_: error or `cab` object with properties `{isBooked: true}` and `currentRideId` having the `id` of new ride created
+> _query_: lat, lon
+> _response_: error or `cab` object
 
-Checks if user is idle and cab is available
-Create a new ride, updates user's and cab's status to booked
-Returns cab details to user
+Returns the array of available Pink cabs within approximately 1 km radius of user's location
 
-PUT `/ride/start/{rideId}`
+POST `/rides`
+
+> _body_: `{source, destination, user}` > _response_: error or `cab` object with properties `{isBooked: true}` and `currentRideId` having the `id` of new ride created
+
+Checks if user is not already on another ride
+Gets the closest cab within 5 km radius of user's location
+Updates user's and cab's status to booked
+Create a new ride
+Returns ride details to user
+
+PATCH `/rides/start/{rideId}`
 
 Updates the ride status to started and start time with current time
-Update user's status to riding
+Updates user's status to riding
+Updates cab's currentRideId to ride id
+Returns ride details to user
 
-PUT `/ride/end/{rideId}`
+PATCH `/rides/end/{rideId}`
 
 Updates the ride status to completed and the end time with current time
-Updates the location of cab to destination location and status to available
 Updates user status to idle
-Returns the amount owed by user
+Updates the location of cab to destination location and status to available
+Returns the receipt of ride to user
 
-PUT `/ride/cancel/{rideId}`
+PATCH `/rides/cancel/{rideId}`
 
 Updates the ride status to cancelled, cab status to available and user status to idle
+Returns ride details to user
 
 ## Testing
 
