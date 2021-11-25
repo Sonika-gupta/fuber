@@ -1,37 +1,42 @@
 const { rides } = require('../../data')
 const { Ride } = require('../classes/Ride')
-const { updateUser } = require('./users')
+const { rideStatus, errors } = require('../globals')
 
 function createRide ({ source, destination, user, cab }) {
-  const ride = new Ride({
-    userId: user.id,
-    cabId: cab.id,
-    source,
-    destination
-  })
-  console.log(ride)
-  rides.push(ride)
-  return ride
+  try {
+    const ride = new Ride({
+      userId: user.id,
+      cab,
+      source,
+      destination
+    })
+    rides.push(ride)
+    return [null, ride]
+  } catch (err) {
+    return [err, null]
+  }
 }
 
 function updateRide (ride) {
-  if (!ride.id) throw Error('Need Ride ID')
-  const i = rides.findIndex(entry => entry.id === ride.id)
-  Object.assign(rides[i], ride)
-  return ride
-}
-
-function startRide (id) {
   try {
-    console.log(id)
-    const ride = updateRide({ id, status: 'active', startTime: Date.now() })
-    const user = updateUser({ id: ride.userId, status: 'riding' })
+    if (!ride.id) throw Error(errors.undefinedRideId)
+
+    const i = rides.findIndex(entry => entry.id == ride.id)
+    if (i === -1) throw Error(errors.rideIdNotFound)
+
+    if (ride.status === rideStatus.started && ride.startTime)
+      throw Error(errors.rideOngoing)
+    if (ride.status === rideStatus.completed && ride.endTime)
+      throw Error(errors.rideCompleted)
+
+    ride = Object.assign(rides[i], ride)
     return [null, ride]
-  } catch (error) {
-    return [error, null]
+  } catch (err) {
+    return [{ error: err.message }, null]
   }
 }
+
 module.exports = {
   createRide,
-  startRide
+  updateRide
 }

@@ -1,7 +1,15 @@
 function findDistance (pointA, pointB) {
-  return Math.sqrt(
-    Math.pow(pointA.lat - pointB.lat, 2) + Math.pow(pointA.lon - pointB.lon, 2)
+  // 1 degree = 111 km
+  return (
+    Math.sqrt(
+      Math.pow(pointA.lat - pointB.lat, 2) +
+        Math.pow(pointA.lon - pointB.lon, 2)
+    ) * 111
   )
+}
+
+function findTimeDifferece (endTime, startTime) {
+  return new Date(endTime).getMinutes() - new Date(startTime).getMinutes()
 }
 
 function findClosest ({ lat, lon }, locations = []) {
@@ -20,5 +28,6 @@ function findClosest ({ lat, lon }, locations = []) {
 
 module.exports = {
   findClosest,
-  findDistance
+  findDistance,
+  findTimeDifferece
 }

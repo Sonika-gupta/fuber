@@ -1,10 +1,10 @@
 const express = require('express')
 const app = express()
+const rideRouter = require('./routers/rides')
 
-const rideRouter = require('./routers/ride')
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(process.cwd() + '/public'))
 app.use(express.json())
-app.use('/ride', rideRouter)
+app.use('/rides', rideRouter)
 
 app.listen(8000, () => {
   console.log('listening on 8000')
