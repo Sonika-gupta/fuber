@@ -14,7 +14,7 @@ function readClosestCab (location) {
     cab = findClosest(location, availableCabs)
     radius += 0.01
   }
-  return cab ? [null, cab] : [errors.cabNotFound, null]
+  return cab ? [null, cab] : [errors.noCabsAvailable, null]
 }
 
 function readAvailableCabs ({ lat, lon }, radius = 0.01) {
@@ -24,7 +24,9 @@ function readAvailableCabs ({ lat, lon }, radius = 0.01) {
       Math.abs(cab.lat - lat) < radius &&
       Math.abs(cab.lon - lon) < radius
   )
-  return availableCabs.length ? [null, cabs] : [errors.cabNotFound, null]
+  return availableCabs.length
+    ? [null, availableCabs]
+    : [errors.noCabsAvailable, null]
 }
 
 function readAvailablePinkCabs (location) {
@@ -34,7 +36,7 @@ function readAvailablePinkCabs (location) {
   }
   return availableCabs.length
     ? [null, availableCabs]
-    : [errors.cabNotFound, null]
+    : [errors.noCabsAvailable, null]
 }
 
 function updateCab (cab) {
