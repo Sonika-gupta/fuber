@@ -4,36 +4,31 @@ const { findDistance, findClosest } = require('../utils')
 const { createRide } = require('./rides')
 const { updateUser } = require('./users')
 
-function readClosestCab (location) {
+function readClosestCab (location, requestPink) {
   // 0.01 degrees = 1.11 km
-  let radius = 0.01
+  let delta = 0.01
   let cab = null
-  while (!cab && radius < 0.05) {
-    const [error, availableCabs] = readAvailableCabs(location, radius)
+  while (!cab && delta < 0.05) {
+    const [error, availableCabs] = readAvailableCabs(
+      location,
+      requestPink,
+      delta
+    )
     if (error) return [error, null]
     cab = findClosest(location, availableCabs)
-    radius += 0.01
+    delta += 0.01
   }
   return cab ? [null, cab] : [errors.noCabsAvailable, null]
 }
 
-function readAvailableCabs ({ lat, lon }, radius = 0.01) {
-  const availableCabs = cabs.filter(
+function readAvailableCabs ({ lat, lon }, requestPink, delta = 0.01) {
+  let availableCabs = cabs.filter(
     cab =>
       !cab.isBooked &&
-      Math.abs(cab.lat - lat) < radius &&
-      Math.abs(cab.lon - lon) < radius
+      Math.abs(cab.lat - lat) < delta &&
+      Math.abs(cab.lon - lon) < delta
   )
-  return availableCabs.length
-    ? [null, availableCabs]
-    : [errors.noCabsAvailable, null]
-}
-
-function readAvailablePinkCabs (location) {
-  let [error, availableCabs] = readAvailableCabs(location)
-  if (availableCabs) {
-    availableCabs = availableCabs.filter(cab => cab.isPink)
-  }
+  if (requestPink) availableCabs = availableCabs.filter(cab => cab.isPink)
   return availableCabs.length
     ? [null, availableCabs]
     : [errors.noCabsAvailable, null]
@@ -44,7 +39,6 @@ function updateCab (cab) {
     const i = cabs.findIndex(entry => entry.id === cab.id)
     if (i === -1) throw Error(errors.cabIdNotFound)
     Object.assign(cabs[i], cab)
-    console.log('updated', cabs[i])
     return [null, cabs[i]]
   } catch (err) {
     return [err, null]
@@ -54,6 +48,5 @@ function updateCab (cab) {
 module.exports = {
   readClosestCab,
   readAvailableCabs,
-  readAvailablePinkCabs,
   updateCab
 }

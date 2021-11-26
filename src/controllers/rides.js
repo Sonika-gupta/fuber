@@ -13,9 +13,12 @@ function getResult (res, method, params) {
 }
 
 function newRide (req, res) {
-  const { source, destination, user } = req.body
-
-  const cab = getResult(res, cabModel.readClosestCab, source)
+  const { source, destination, user, requestPink = false } = req.body
+  console.log(requestPink)
+  const cab = getResult(res, cabModel.readClosestCab, {
+    source,
+    requestPink
+  })
   Object.assign(
     user,
     getResult(res, userModel.updateUser, {

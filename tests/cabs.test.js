@@ -24,7 +24,7 @@ test('Available cabs at Adobe should show error of no cabs available', () => {
 
 test('Available pink cabs at geekskool should return array of 1 cab', () => {
   expect(
-    readAvailablePinkCabs({ lat: 12.961756055726415, lon: 77.64412371081289 })
+    readAvailableCabs({ lat: 12.961756055726415, lon: 77.64412371081289 }, true)
   ).toEqual([null, cabs.filter(cab => cab.isPink)])
 })
 

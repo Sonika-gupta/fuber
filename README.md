@@ -80,21 +80,14 @@ ride: {
 
 GET `/rides`
 
-> _query_: lat, lon
-> _response_: error or `cab` object
+> _query_: lat, lon, isPink
+> _response_: error or `cab` object []
 
-Returns the array of available cabs within approximately 1 km radius of user's location
-
-GET `/rides/pink`
-
-> _query_: lat, lon
-> _response_: error or `cab` object
-
-Returns the array of available Pink cabs within approximately 1 km radius of user's location
+Returns the array of available cabs within approximately 1 km radius of user's location. To get the list of available pink cabs, set query param `requestPink` as `true`
 
 POST `/rides`
 
-> _body_: `{source, destination, user}` > _response_: error or `cab` object with properties `{isBooked: true}` and `currentRideId` having the `id` of new ride created
+> _body_: `{source, destination, user, requestPink}` > _response_: error or `cab` object with properties `{isBooked: true}` and `currentRideId` having the `id` of new ride created
 
 Checks if user is not already on another ride
 Gets the closest cab within 5 km radius of user's location
@@ -102,21 +95,21 @@ Updates user's and cab's status to booked
 Create a new ride
 Returns ride details to user
 
-PATCH `/rides/start/{rideId}`
+PATCH `/rides/{rideId}/start`
 
 Updates the ride status to started and start time with current time
 Updates user's status to riding
 Updates cab's currentRideId to ride id
 Returns ride details to user
 
-PATCH `/rides/end/{rideId}`
+PATCH `/rides/{rideId}/end`
 
 Updates the ride status to completed and the end time with current time
 Updates user status to idle
 Updates the location of cab to destination location and status to available
 Returns the receipt of ride to user
 
-PATCH `/rides/cancel/{rideId}`
+PATCH `/rides/{rideId}/cancel`
 
 Updates the ride status to cancelled, cab status to available and user status to idle
 Returns ride details to user
