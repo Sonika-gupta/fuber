@@ -12,6 +12,7 @@ module.exports = {
     rideOngoing: 'Ride Already Started',
     rideCompleted: 'Ride Already Completed',
     sourceRequired: 'Enter Pick up location',
+    destinationRequired: 'Enter Drop location',
     cannotCancelRide:
       'Ride is Already Ongoing or Completed, Cannot be Cancelled',
     rideNotActive: 'Cannot update an inactive ride'

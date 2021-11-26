@@ -47,6 +47,21 @@ test('Create new ride without source should ask for pickup location', () => {
   ).toEqual([errors.sourceRequired, null])
 })
 
+test('Create new ride without destination should ask for drop location', () => {
+  const user = users.find(user => user.id == 2)
+  const cab = cabs.find(cab => cab.id == 1)
+  expect(
+    createRide({
+      user,
+      cab,
+      source: {
+        lat: 12.961756055726415,
+        lon: 77.64412371081289
+      }
+    })
+  ).toEqual([errors.destinationRequired, null])
+})
+
 test('Create new ride', () => {
   const user = users.find(user => user.id == 2)
   const cab = cabs.find(cab => cab.id == 1)
