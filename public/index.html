@@ -3,11 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="style.css" />
+    <script src="./index.js" type="module"></script>
     <title>Fuber</title>
   </head>
   <body>
-    <h1>Available Cars</h1>
-    <ul id="cabsList"></ul>
-    <button id="bookNewButton">Book Now</button>
+    <header>
+      <h1>
+        Fuber
+      </h1>
+      <hr />
+    </header>
+    <main>
+      <section id="idle">
+        <h2>Available Cabs:</h2>
+        <ul role="list" id="cabList" class="details"></ul>
+        <div class="form">
+          <h3>Enter Destination:</h3>
+          <div id="destination">
+            <div class="formField">
+              <label for="lat">Latitude</label>
+              <input id="lat" name="lat" type="number" />
+            </div>
+            <div class="formField">
+              <label for="lon">Longitude</label>
+              <input id="lon" name="lon" type="number" />
+            </div>
+          </div>
+          <div class="action">
+            <button id="bookButton">Book Now</button>
+            <button id="bookPinkButton">Book A Pink Cab</button>
+          </div>
+        </div>
+      </section>
+      <section id="waiting" class="hidden">
+        <h2>Start the ride when you are ready</h2>
+        <div id="cabDetails" class="details"></div>
+        <div class="action">
+          <button id="startRideButton">Start Ride</button>
+          <button id="cancelRideButton">Cancel Ride</button>
+        </div>
+      </section>
+      <section id="onTrip" class="hidden">
+        <div>Ride Started</div>
+        <div id="rideDetails" class="details"></div>
+        <div class="action">
+          <button id="endRideButton">Finish Ride</button>
+        </div>
+      </section>
+      <section id="receipt" class="hidden">
+        <div>Ride Completed</div>
+        <div id="receiptDetails" class="details"></div>
+        <div class="action">
+          <button id="redirectToHome">Home</button>
+        </div>
+      </section>
+    </main>
   </body>
 </html>

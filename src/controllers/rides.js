@@ -16,7 +16,7 @@ function newRide (req, res) {
   const { source, destination, user, requestPink = false } = req.body
   console.log(requestPink)
   const cab = getResult(res, cabModel.readClosestCab, {
-    source,
+    location: source,
     requestPink
   })
   Object.assign(

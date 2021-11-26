@@ -4,7 +4,7 @@ const { findDistance, findClosest } = require('../utils')
 const { createRide } = require('./rides')
 const { updateUser } = require('./users')
 
-function readClosestCab (location, requestPink) {
+function readClosestCab ({ location, requestPink }) {
   // 0.01 degrees = 1.11 km
   let delta = 0.01
   let cab = null

@@ -11,6 +11,12 @@ Basic implementation of API for a cab hiring service.
 - If there are no taxis available, the customer's request should be rejected.
 - The customer ends the ride at some location. The cab waits around outside the customer’s house, and is available to be assigned to another customer.
 
+## Assumptions
+
+- The user is already logged in.
+- To show the functionalities of api without real time data, the pickup location is assigned location of users[0] instead of accessing current geolocation.
+- The ride is created with status 'accepted' assuming the driver always accepts the ride.
+
 ## Getting Started
 
 To get the Node server running locally:
