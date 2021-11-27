@@ -1,6 +1,7 @@
 const { createRide, updateRide } = require('../src/models/rides')
 const { errors, rideStatus } = require('../src/globals')
 const { users, cabs, rides } = require('../data')
+const { UserError } = require('../src/classes')
 
 test('Create new ride without user should fail', () => {
   const cab = cabs.find(cab => cab.id == 1)
@@ -16,7 +17,7 @@ test('Create new ride without user should fail', () => {
       },
       cab
     })
-  ).toEqual([errors.undefinedUserId, null])
+  ).toEqual([new UserError(errors.undefinedUserId), null])
 })
 
 test('Create new ride without cab should fail', () => {
@@ -33,7 +34,7 @@ test('Create new ride without cab should fail', () => {
       },
       user
     })
-  ).toEqual([errors.undefinedCabId, null])
+  ).toEqual([new UserError(errors.undefinedCabId), null])
 })
 
 test('Create new ride without source should ask for pickup location', () => {
@@ -44,7 +45,7 @@ test('Create new ride without source should ask for pickup location', () => {
       user,
       cab
     })
-  ).toEqual([errors.sourceRequired, null])
+  ).toEqual([new UserError(errors.sourceRequired), null])
 })
 
 test('Create new ride without destination should ask for drop location', () => {
@@ -59,13 +60,12 @@ test('Create new ride without destination should ask for drop location', () => {
         lon: 77.64412371081289
       }
     })
-  ).toEqual([errors.destinationRequired, null])
+  ).toEqual([new UserError(errors.destinationRequired), null])
 })
 
 test('Create new ride', () => {
   const user = users.find(user => user.id == 2)
   const cab = cabs.find(cab => cab.id == 1)
-  console.log(user)
   expect(
     createRide({
       source: {
@@ -87,7 +87,9 @@ test('Create new ride', () => {
       cab: {
         id: 1,
         driver: 'Resida',
-        isPink: false
+        isPink: false,
+        lat: 12.961482100489755,
+        lon: 77.64549770865008
       },
       status: 'accepted',
       source: {
@@ -106,13 +108,12 @@ test('Create new ride', () => {
 
 test('Updating ride without id not possible', () => {
   expect(updateRide({ startTime: Date.now() })).toEqual([
-    errors.undefinedRideId,
+    new UserError(errors.undefinedRideId),
     null
   ])
 })
 
 test('Start a ride', () => {
-  console.log(rides)
   expect(
     updateRide({ id: 1, startTime: 1637835011712, status: rideStatus.started })
   ).toEqual([
@@ -123,7 +124,9 @@ test('Start a ride', () => {
       cab: {
         id: 1,
         driver: 'Resida',
-        isPink: false
+        isPink: false,
+        lat: 12.961482100489755,
+        lon: 77.64549770865008
       },
       status: 'started',
       source: {
@@ -143,7 +146,7 @@ test('Start a ride', () => {
 test('Starting an ongoing ride should fail', () => {
   expect(
     updateRide({ id: 1, startTime: 1637835013242, status: rideStatus.started })
-  ).toEqual([errors.rideOngoing, null])
+  ).toEqual([new UserError(errors.rideOngoing), null])
 })
 
 test('End a ride', () => {
@@ -157,7 +160,9 @@ test('End a ride', () => {
       cab: {
         id: 1,
         driver: 'Resida',
-        isPink: false
+        isPink: false,
+        lat: 12.961482100489755,
+        lon: 77.64549770865008
       },
       status: 'completed',
       source: {
@@ -177,12 +182,12 @@ test('End a ride', () => {
 test('Ending a completed ride should fail', () => {
   expect(
     updateRide({ id: 1, endTime: 1637835013242, status: rideStatus.completed })
-  ).toEqual([errors.rideCompleted, null])
+  ).toEqual([new UserError(errors.rideCompleted), null])
 })
 
 test('Cancelling a started or completed ride should fail', () => {
   expect(updateRide({ id: 1, status: rideStatus.cancelled })).toEqual([
-    errors.cannotCancelRide,
+    new UserError(errors.cannotCancelRide),
     null
   ])
 })
