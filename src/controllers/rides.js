@@ -1,20 +1,21 @@
-const rideModel = require('../models/rides')
-const userModel = require('../models/users')
-const cabModel = require('../models/cabs')
+const {
+  cabs: cabModel,
+  rides: rideModel,
+  users: userModel
+} = require('../models')
+
 const { rideStatus, userStatus, errors } = require('../globals')
 
 function getResult (res, method, params) {
   console.log('getting results for', method)
   const [error, result] = method(params)
   if (error) {
-    console.log(error)
-    res.status(500).send(error)
+    res.status(error.status || 500).send(error.message)
   } else return result
 }
 
 function newRide (req, res) {
   const { source, destination, user, requestPink = false } = req.body
-  console.log(requestPink)
   const cab = getResult(res, cabModel.readClosestCab, {
     location: source,
     requestPink
@@ -39,8 +40,7 @@ function newRide (req, res) {
     user,
     cab
   })
-  console.log(ride)
-  res.send(ride)
+  res.status(201).send(ride)
 }
 
 function startRide (req, res) {
@@ -94,7 +94,7 @@ function cancelRide (req, res) {
     isBooked: false,
     currentRideId: null
   })
-  res.send(ride)
+  res.status(204).send(ride)
 }
 
 module.exports = {

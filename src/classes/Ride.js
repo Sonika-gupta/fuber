@@ -8,7 +8,9 @@ class Ride {
     this.cab = {
       id: cab.id,
       driver: cab.driver,
-      isPink: cab.isPink
+      isPink: cab.isPink,
+      lat: cab.lat,
+      lon: cab.lon
     }
     this.status = 'accepted' // enum ['started', 'cancelled', 'completed']
     this.source = source
@@ -33,7 +35,7 @@ class Ride {
     return this.distance * 2 + this.time + this.pinkCabCharge
   }
 
-  getReceipt (params) {
+  getReceipt () {
     return {
       pickUpLocation: this.source,
       dropLocation: this.destination,
@@ -45,6 +47,4 @@ class Ride {
   }
 }
 
-module.exports = {
-  Ride
-}
+module.exports = Ride

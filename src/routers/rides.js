@@ -1,6 +1,5 @@
 const router = require('express').Router()
-const rideController = require('../controllers/rides')
-const cabController = require('../controllers/cabs')
+const { rides: rideController, cabs: cabController } = require('../controllers')
 
 router.get('/', cabController.getCabs)
 router.post('/', rideController.newRide)

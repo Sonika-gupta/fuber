@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const rideRouter = require('./routers/rides')
+const { rides: rideRouter } = require('./routers')
 
 app.use(express.static(process.cwd() + '/public'))
 app.use(express.json())
