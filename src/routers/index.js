@@ -1,5 +1,7 @@
 const rides = require('./rides')
+const users = require('./users')
 
 module.exports = {
-  rides
+  rides,
+  users
 }

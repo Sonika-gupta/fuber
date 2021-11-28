@@ -21,6 +21,17 @@ function updateUser (user) {
   }
 }
 
+function readUser (id) {
+  try {
+    const user = users.find(entry => entry.id == id)
+    if (!user) throw new UserError(errors.userIdNotFound, 404)
+    return [null, user]
+  } catch (err) {
+    return [err, null]
+  }
+}
+
 module.exports = {
+  readUser,
   updateUser
 }
