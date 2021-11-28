@@ -13,13 +13,13 @@ test('Available cabs at geekskool should return array of 3 cabs', () => {
   ).toEqual([null, cabs])
 })
 
-test('Available cabs at Adobe should show error of no cabs available', () => {
+test('Available cabs at Adobe should return empty array', () => {
   expect(
     readAvailableCabs({
       lat: 12.987310885103668,
       lon: 77.67605335908235
     })
-  ).toEqual([{ status: 503, message: errors.noCabsAvailable }, null])
+  ).toEqual([null, []])
 })
 
 test('Available pink cabs at geekskool should return array of 1 cab', () => {

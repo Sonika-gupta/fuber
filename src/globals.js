@@ -2,6 +2,7 @@ module.exports = {
   rideSerialNumber: 0,
   errors: {
     noCabsAvailable: 'No Cabs Available',
+    noPinkCabsAvailable: 'No Pink Cabs Available',
     userNotIdle: 'Finish the current ride to book another',
     cabIdNotFound: 'Cab not found',
     rideIdNotFound: 'Ride Not Found',

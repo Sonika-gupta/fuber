@@ -4,10 +4,12 @@ const { rideStatus, errors } = require('../globals')
 
 function createRide ({ source, destination, user, cab }) {
   try {
-    if (!cab) throw new UserError(errors.undefinedCabId)
-    if (!user) throw new UserError(errors.undefinedUserId)
-    if (!source) throw new UserError(errors.sourceRequired)
-    if (!destination) throw new UserError(errors.destinationRequired)
+    if (!cab || !cab.id) throw new UserError(errors.undefinedCabId)
+    if (!user || !user.id) throw new UserError(errors.undefinedUserId)
+    if (!source || !source.lat || !source.lon)
+      throw new UserError(errors.sourceRequired)
+    if (!destination || !destination.lat || !destination.lon)
+      throw new UserError(errors.destinationRequired)
     const ride = new Ride({
       userId: user.id,
       cab,

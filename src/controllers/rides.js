@@ -7,11 +7,17 @@ const {
 const { rideStatus, userStatus, errors } = require('../globals')
 
 function getResult (res, method, params) {
-  console.log('getting results for', method)
+  console.log(method)
   const [error, result] = method(params)
   if (error) {
-    res.status(error.status || 500).send(error.message)
-  } else return result
+    res
+      .status(error.status || 500)
+      .send({ error: { ...error, message: error.message } })
+    return null
+  } else {
+    console.log(result)
+    return result
+  }
 }
 
 function newRide (req, res) {
@@ -20,26 +26,31 @@ function newRide (req, res) {
     location: source,
     requestPink
   })
-  Object.assign(
-    user,
-    getResult(res, userModel.updateUser, {
-      id: user.id,
-      status: userStatus.waiting
+  const ride =
+    cab &&
+    getResult(res, rideModel.createRide, {
+      source,
+      destination,
+      user,
+      cab
     })
-  )
-  Object.assign(
-    cab,
-    getResult(res, cabModel.updateCab, {
-      id: cab.id,
-      isBooked: true
-    })
-  )
-  const ride = getResult(res, rideModel.createRide, {
-    source,
-    destination,
-    user,
-    cab
-  })
+  ride &&
+    Object.assign(
+      user,
+      getResult(res, userModel.updateUser, {
+        id: user.id,
+        status: userStatus.waiting
+      })
+    )
+  ride &&
+    Object.assign(
+      cab,
+      getResult(res, cabModel.updateCab, {
+        id: cab.id,
+        isBooked: true,
+        currentRideId: ride.id
+      })
+    )
   res.status(201).send(ride)
 }
 
@@ -49,14 +60,18 @@ function startRide (req, res) {
     status: rideStatus.started,
     startTime: Date.now()
   })
-  const user = getResult(res, userModel.updateUser, {
-    id: ride.userId,
-    status: userStatus.riding
-  })
-  const cab = getResult(res, cabModel.updateCab, {
-    id: ride.cab.id,
-    currentRideId: ride.id
-  })
+  const user =
+    ride &&
+    getResult(res, userModel.updateUser, {
+      id: ride.userId,
+      status: userStatus.riding
+    })
+  const cab =
+    ride &&
+    getResult(res, cabModel.updateCab, {
+      id: ride.cab.id,
+      currentRideId: ride.id
+    })
   res.send(ride)
 }
 
@@ -66,18 +81,22 @@ function endRide (req, res) {
     status: rideStatus.completed,
     endTime: Date.now()
   })
-  const user = getResult(res, userModel.updateUser, {
-    id: ride.userId,
-    status: userStatus.idle
-  })
-  const cab = getResult(res, cabModel.updateCab, {
-    id: ride.cab.id,
-    isBooked: false,
-    currentRideId: null,
-    lat: ride.destination.lat,
-    lon: ride.destination.lon
-  })
-  res.send(ride.getReceipt())
+  const user =
+    ride &&
+    getResult(res, userModel.updateUser, {
+      id: ride.userId,
+      status: userStatus.idle
+    })
+  const cab =
+    ride &&
+    getResult(res, cabModel.updateCab, {
+      id: ride.cab.id,
+      isBooked: false,
+      currentRideId: null,
+      lat: ride.destination.lat,
+      lon: ride.destination.lon
+    })
+  res.send({ ...ride, receipt: ride.getReceipt() })
 }
 
 function cancelRide (req, res) {
@@ -85,16 +104,20 @@ function cancelRide (req, res) {
     id: +req.params.id,
     status: rideStatus.cancelled
   })
-  const user = getResult(res, userModel.updateUser, {
-    id: ride.userId,
-    status: userStatus.idle
-  })
-  const cab = getResult(res, cabModel.updateCab, {
-    id: ride.cab.id,
-    isBooked: false,
-    currentRideId: null
-  })
-  res.status(204).send(ride)
+  const user =
+    ride &&
+    getResult(res, userModel.updateUser, {
+      id: ride.userId,
+      status: userStatus.idle
+    })
+  const cab =
+    ride &&
+    getResult(res, cabModel.updateCab, {
+      id: ride.cab.id,
+      isBooked: false,
+      currentRideId: null
+    })
+  res.send(ride)
 }
 
 module.exports = {

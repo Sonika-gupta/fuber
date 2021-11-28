@@ -22,7 +22,6 @@ function findClosest ({ lat, lon }, locations = []) {
     }
     return minDistance
   }, Infinity)
-  console.log('closest:', closestLocation)
   return closestLocation
 }
 

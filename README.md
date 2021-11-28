@@ -58,6 +58,7 @@ cab: {
     lon: 77.64549770865008,
     isBooked: false,
     isPink: false,
+    currentRideId: null
 }
 
 ride: {
@@ -67,6 +68,8 @@ ride: {
     id: 1,
     driver: 'Resida',
     isPink: false,
+    lat: 12.961482100489755,
+    lon: 77.64549770865008,
   },
   status: 'accepted' // enum ['accepted', 'started', 'cancelled', 'completed'],
   source: {
@@ -93,7 +96,7 @@ Returns the array of available cabs within approximately 1 km radius of user's l
 
 POST `/rides`
 
-> _body_: `{source, destination, user, requestPink}` > _response_: error or `cab` object with properties `{isBooked: true}` and `currentRideId` having the `id` of new ride created
+> _body_: `{source, destination, user, requestPink}` > _response_: error or newly created `ride` object
 
 Checks if user is not already on another ride
 Gets the closest cab within 5 km radius of user's location
@@ -113,7 +116,7 @@ PATCH `/rides/{rideId}/end`
 Updates the ride status to completed and the end time with current time
 Updates user status to idle
 Updates the location of cab to destination location and status to available
-Returns the receipt of ride to user
+Returns the ride details including `receipt` to user
 
 PATCH `/rides/{rideId}/cancel`
 

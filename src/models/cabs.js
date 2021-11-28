@@ -19,7 +19,15 @@ function readClosestCab ({ location, requestPink }) {
   }
   return cab
     ? [null, cab]
-    : [{ status: 503, message: errors.noCabsAvailable }, null]
+    : [
+        {
+          status: 503,
+          message: requestPink
+            ? errors.noPinkCabsAvailable
+            : errors.noCabsAvailable
+        },
+        null
+      ]
 }
 
 function readAvailableCabs ({ lat, lon }, requestPink, delta = 0.01) {
@@ -30,9 +38,7 @@ function readAvailableCabs ({ lat, lon }, requestPink, delta = 0.01) {
       Math.abs(cab.lon - lon) < delta
   )
   if (requestPink) availableCabs = availableCabs.filter(cab => cab.isPink)
-  return availableCabs.length
-    ? [null, availableCabs]
-    : [{ status: 503, message: errors.noCabsAvailable }, null]
+  return [null, availableCabs]
 }
 
 function updateCab (cab) {

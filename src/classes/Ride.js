@@ -39,10 +39,10 @@ class Ride {
     return {
       pickUpLocation: this.source,
       dropLocation: this.destination,
-      distance: this.distance,
+      distance: this.distance.toFixed(2),
       time: this.time,
       pinkCabCharge: this.pinkCabCharge,
-      charge: this.charge
+      charge: Math.round(this.charge)
     }
   }
 }
