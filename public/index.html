@@ -18,15 +18,15 @@
         <h2>Available Cabs:</h2>
         <ul role="list" id="cabList" class="details"></ul>
         <div class="form">
-          <h3>Enter Destination:</h3>
+          <h3>Where to?</h3>
           <div id="destination">
             <div class="formField">
               <label for="lat">Latitude</label>
-              <input id="lat" name="lat" type="number" />
+              <input id="lat" name="lat" type="number" autocomplete />
             </div>
             <div class="formField">
               <label for="lon">Longitude</label>
-              <input id="lon" name="lon" type="number" />
+              <input id="lon" name="lon" type="number" autocomplete />
             </div>
           </div>
           <div class="action">
@@ -35,28 +35,39 @@
           </div>
         </div>
       </section>
-      <section id="waiting" class="hidden">
-        <h2>Start the ride when you are ready</h2>
+      <section id="booked" class="hidden">
+        <h4>Start the ride when you are ready</h4>
         <div id="cabDetails" class="details"></div>
         <div class="action">
           <button id="startRideButton">Start Ride</button>
           <button id="cancelRideButton">Cancel Ride</button>
         </div>
       </section>
-      <section id="onTrip" class="hidden">
-        <div>Ride Started</div>
+      <section id="riding" class="hidden">
+        <h4>Ride Started</h4>
         <div id="rideDetails" class="details"></div>
         <div class="action">
           <button id="endRideButton">Finish Ride</button>
         </div>
       </section>
-      <section id="receipt" class="hidden">
-        <div>Ride Completed</div>
+      <section id="completed" class="hidden">
+        <h4>Ride Completed</h4>
         <div id="receiptDetails" class="details"></div>
         <div class="action">
-          <button id="redirectToHome">Home</button>
+          <button id="homeButton">Home</button>
         </div>
       </section>
+      <section id="cancelled" class="hidden">
+        <div>
+          <h4>
+            Ride Cancelled Successfully. Redirecting to home in...
+            <span id="timer">4</span>
+          </h4>
+        </div>
+      </section>
+      <div>
+        <p id="error" class="hidden"></p>
+      </div>
     </main>
   </body>
 </html>

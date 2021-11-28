@@ -51,15 +51,27 @@ h2 {
   font-weight: 400;
 }
 
+h4 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-align: center;
+}
+
 .details {
   max-width: 22rem;
+  margin: 1rem auto;
 }
 
 .details li {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+}
+
+.details p {
+  margin: 1rem;
+  text-align: center;
 }
 
 #destination {
@@ -89,6 +101,7 @@ h2 {
 
 .action {
   display: flex;
+  justify-content: center;
 }
 
 .action button {
@@ -99,4 +112,18 @@ h2 {
   border-radius: 4px;
   min-height: 1.5rem;
   width: 50%;
+}
+
+.info {
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#error {
+  display: block;
+  margin: 1rem;
+  text-align: center;
+  color: red;
+  transition: all 0.7s ease-in-out;
 }
