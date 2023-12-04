@@ -13,13 +13,13 @@ async function fetchData (route, method = 'GET', data) {
   return value
 }
 
-function getCabs (params) {
+async function getCabs (params) {
   const route = 'rides?' + new URLSearchParams(params).toString()
-  return fetchData(route)
+  return await fetchData(route)
 }
 
-function bookRide ({ source, destination, user, requestPink }) {
-  return fetchData('rides', 'POST', {
+async function bookRide ({ source, destination, user, requestPink }) {
+  return await fetchData('rides', 'POST', {
     source,
     destination,
     user,
@@ -27,20 +27,20 @@ function bookRide ({ source, destination, user, requestPink }) {
   })
 }
 
-function startRide (id) {
-  return fetchData(`rides/${id}/start`, 'PATCH')
+async function startRide (id) {
+  return await fetchData(`rides/${id}/start`, 'PATCH')
 }
 
-function endRide (id) {
-  return fetchData(`rides/${id}/end`, 'PATCH')
+async function endRide (id) {
+  return await fetchData(`rides/${id}/end`, 'PATCH')
 }
 
-function cancelRide (id) {
-  return fetchData(`rides/${id}/cancel`, 'PATCH')
+async function cancelRide (id) {
+  return await fetchData(`rides/${id}/cancel`, 'PATCH')
 }
 
-function getUser (id) {
-  return fetchData(`users/${id}`)
+async function getUser (id) {
+  return await fetchData(`users/${id}`)
 }
 
 export { getCabs, bookRide, startRide, endRide, cancelRide, getUser }
